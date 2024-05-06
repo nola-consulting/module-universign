@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author    Nola Consulting <nolasoftware@nolaconsulting.fr>
+ * @copyright 2024-present Nola Consulting
+ * @license   https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.nolaconsulting.fr/
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <universign>
+            <configuration>
+                <active>0</active>
+                <api_url>https://api.universign.com/v1/</api_url>
+                <api_key></api_key>
+                <api_url_test>https://api.alpha.universign.com/v1/</api_url_test>
+                <api_key_test></api_key_test>
+                <prod_mode>0</prod_mode>
+                <default_transaction_name>Document #%ID</default_transaction_name>
+                <default_document_name>document-%ID.pdf</default_document_name>
+                <active_demo>0</active_demo>
+                <default_country_id>FR</default_country_id>
+            </configuration>
+        </universign>
+    </default>
+</config>

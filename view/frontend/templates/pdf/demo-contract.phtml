@@ -1,0 +1,44 @@
+<?php
+/**
+ * @author    Nola Consulting <nolasoftware@nolaconsulting.fr>
+ * @copyright 2024-present Nola Consulting
+ * @license   https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.nolaconsulting.fr/
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use NolaConsulting\Universign\Block\Pdf\Contract;
+
+/** @var Contract $block */
+/** @var Escaper $escaper */
+
+?>
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #222222;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 18px;
+            line-height: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Contract Demo</h1>
+    <p>Dear <?= $escaper->escapeHtml($block->getFullName()) ?>,</p>
+    <p>This contract allows you to test the NolaConsulting_Universign module.</p>
+    <p>Thank you.</p>
+</body>
+</html>

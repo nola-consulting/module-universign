@@ -1,0 +1,24 @@
+{
+    "name": "nola-consulting/module-universign",
+    "version": "1.0.0",
+    "description": "Magento module allowing you sign documents with Universign, an eIDAS qualified Trust Service Provider.",
+    "type": "magento2-module",
+    "require": {
+        "php": "^8",
+        "ext-curl": "*",
+        "magento/framework": "*",
+        "dompdf/dompdf": "^2.0",
+        "giggsey/libphonenumber-for-php": "^8.0"
+    },
+    "license": [
+        "MIT"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "NolaConsulting\\Universign\\": ""
+        }
+    }
+}

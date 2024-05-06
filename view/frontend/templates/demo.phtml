@@ -1,0 +1,54 @@
+<?php
+/**
+ * @author    Nola Consulting <nolasoftware@nolaconsulting.fr>
+ * @copyright 2024-present Nola Consulting
+ * @license   https://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @link      https://www.nolaconsulting.fr/
+ */
+
+declare(strict_types=1);
+
+use NolaConsulting\Universign\Block\Demo;
+
+/** @var Demo $block */
+
+$transactionData = $block->getTransaction()->getTransactionData();
+
+?>
+<h1>Universign Demo</h1>
+<br />
+
+<h2>Create and sign a document</h2>
+<form>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" placeholder="john.doe@example.com" />
+    <label for="full_name">Full name</label>
+    <input type="text" name="full_name" id="full_name" placeholder="John Doe" />
+    <label for="phone">Phone</label>
+    <input type="text" name="phone" id="phone" placeholder="0123456789" />
+    <label for="country_id">Country ID</label>
+    <input type="text" name="country_id" id="country_id" placeholder="FR" />
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<br /><br />
+
+<h2>Retrieve transaction data</h2>
+<form>
+    <label for="transaction_id">Transaction ID</label>
+    <input type="text" name="transaction_id" id="transaction_id" placeholder="tx_xxxxxxxx" value="<?= $block->getTransactionId() ?>" />
+    <br /><br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <br />
+    <?php if (isset($transactionData['error_description'])): ?>
+        <strong><?= $transactionData['error_description'] ?></strong>
+    <?php elseif (isset($transactionData['name'])): ?>
+        <strong>Name</strong>: <?= $transactionData['name'] ?><br />
+        <strong>Status</strong>: <?= $transactionData['state'] ?><br />
+        <a href="<?= $block->getTransaction()->getTransactionUrl() ?>" target="_blank">Link to sign</a><br />
+        <strong>All details</strong>:<br />
+        <pre style="width: 90%; height: 500px; overflow-y: scroll; background: #EEEEEE">
+            <?= print_r($transactionData, true) ?>
+        </pre>
+    <?php endif; ?>
+</form>
