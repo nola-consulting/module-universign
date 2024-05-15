@@ -15,6 +15,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutFactory;
 use NolaConsulting\Universign\Model\PdfCreatorFactory;
@@ -38,6 +39,10 @@ class Demo extends Template
      * @param DirectoryList $dir
      * @param ResponseInterface $response
      * @param RedirectInterface $redirect
+     * @param LayoutFactory $layoutFactory
+     * @param Filesystem $filesystem
+     * @param PdfCreatorFactory $pdfCreatorFactory
+     * @param ManagerInterface $messageManager
      * @param array $data
      */
     public function __construct(
@@ -50,6 +55,7 @@ class Demo extends Template
         private LayoutFactory      $layoutFactory,
         private Filesystem         $filesystem,
         private PdfCreatorFactory  $pdfCreatorFactory,
+        private ManagerInterface   $messageManager,
         array                      $data = []
     )
     {
@@ -62,6 +68,10 @@ class Demo extends Template
      */
     protected function _prepareLayout()
     {
+        if ($this->response->getHeader('Location')) {
+            return parent::_prepareLayout();
+        }
+
         /** @var Transaction $transaction */
         $this->transaction = $this->transactionFactory->create();
 
@@ -100,9 +110,18 @@ class Demo extends Template
                     ->create();
 
                 $redirectUrl = $this->transaction->getTransactionUrl();
+                $transactionData = $this->getTransactionData();
+                $errorDescription = $transactionData['error_description'] ?? '';
 
-                $this->response->setRedirect($redirectUrl);
-                $this->redirect->redirect($this->response, $redirectUrl);
+                if ($redirectUrl && !$errorDescription) {
+                    $this->response->setRedirect($redirectUrl);
+                    $this->redirect->redirect($this->response, $redirectUrl);
+                } else {
+                    $this->response->setRedirect($this->redirect->getRefererUrl());
+                    $this->redirect->redirect($this->response, $this->redirect->getRefererUrl());
+                    $this->logger->error('Fail to retrieve redirect URL (' . $errorDescription . ')');
+                    $this->messageManager->addErrorMessage('Fail to retrieve redirect URL (' . $errorDescription . ')');
+                }
             }
         }
 
@@ -141,11 +160,23 @@ class Demo extends Template
 
     /**
      *
-     * @return Transaction
+     * @return Transaction|null
      */
-    public function getTransaction(): Transaction
+    public function getTransaction(): ?Transaction
     {
-        return $this->transaction;
+        return $this->transaction ?? null;
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getTransactionData(): array
+    {
+        if (isset($this->transaction)) {
+            return $this->transaction->getTransactionData();
+        }
+        return [];
     }
 
     /**
