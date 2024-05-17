@@ -14,7 +14,7 @@ Go to
 `STORES > Configuration > SERVICES > Universign`
 
 You can find your API key on the Universign website, in your account under 
-`Developper > API keys.`
+`Developer > API keys.`
 
 You can set a default `Country ID` for your website, it is used to format the phone number with the right country code.
 If your website has customers from different countries, you can specify the `$countryId` in the `setSigner()` method.
